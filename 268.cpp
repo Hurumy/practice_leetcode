@@ -1,21 +1,14 @@
-
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        vector<int> lst(nums.size() + 1, -1);
+        long long int ans = nums.size() * (nums.size() + 1) / 2;
+        long long int sum = 0;
 
-        for (int i = 0; i < nums.size(); i++)
+        for (const auto& e: nums)
         {
-            lst[nums[i]] = nums[i];
+            sum += e;
         }
 
-        for (int i = 0; i < nums.size() + 1; i++)
-        {
-            if (lst[i] == -1)
-            {
-                return (i);
-            }
-        }
-        return (-1);
+        return (ans - sum);
     }
 };
