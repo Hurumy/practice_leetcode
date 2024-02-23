@@ -1,7 +1,7 @@
 
 class Solution {
 public:
-    int dfs(int focus, int price, int depth, vector<vector<int>>& flights, int dst, int k, vector<bool> seen, int result)
+    int dfs(int focus, int price, int depth, vector<vector<int>>& flights, int &dst, int &k, vector<bool> seen, int result)
     {
         int res = result;
         seen[focus] = true;
@@ -15,12 +15,15 @@ public:
 
         for (int i=0; i<flights.size(); i++)
         {
-            vector<int> f = flights.at(i);
-            if (f.at(0) == focus && seen.at(f.at(1)) == false)
+            if (flights[i][0] == focus)
             {
-                int ret = dfs(f.at(1), price+f.at(2), depth+1, flights, dst, k, seen, res);
-                if (ret != -1 && ret < res)
-                    res = ret;
+                vector<int> f = flights[i];
+                if (seen[f[1]] == false)
+                {
+                    int ret = dfs(f[1], price+f[2], depth+1, flights, dst, k, seen, res);
+                    if (ret != -1 && ret < res)
+                        res = ret;
+                }
             }
         }
         return (res);
@@ -31,7 +34,6 @@ public:
         int res;
 
         res = dfs(src, 0, 0, flights, dst, k, seen, INT_MAX);
-
         if (res == INT_MAX)
             return (-1);
         return (res);
