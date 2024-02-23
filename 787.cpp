@@ -1,4 +1,3 @@
-
 class Solution {
 public:
     int dfs(int focus, int price, int depth, vector<vector<int>>& flights, int &dst, int &k, vector<bool> seen, int result)
@@ -10,17 +9,16 @@ public:
             return (price);
         if (depth > k)
             return (-1);
-        if (price > result)
+        if (price >= result)
             return (-1);
 
         for (int i=0; i<flights.size(); i++)
         {
             if (flights[i][0] == focus)
             {
-                vector<int> f = flights[i];
-                if (seen[f[1]] == false)
+                if (seen[flights[i][1]] == false)
                 {
-                    int ret = dfs(f[1], price+f[2], depth+1, flights, dst, k, seen, res);
+                    int ret = dfs(flights[i][1], price+flights[i][2], depth+1, flights, dst, k, seen, res);
                     if (ret != -1 && ret < res)
                         res = ret;
                 }
