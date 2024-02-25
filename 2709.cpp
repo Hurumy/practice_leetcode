@@ -45,29 +45,31 @@ public:
                             return (res);
                         used.pop_front();
                     }
-                    
-                    // まず前方に追加して探索
-                    if (gcd(nums[used.front()], nums[j]) > 1)
+                    else
                     {
-                        used.push_front(j);
-                        if (used.size() == nums.size())
-                            return (used);
-                        deque<int> res = dfs(i+1, primes, edges, nums, used);
-                        if (res.size() == nums.size())
-                            return (res);
-                        used.pop_front();
-                    }
+                        // まず前方に追加して探索
+                        if (gcd(nums[used.front()], nums[j]) > 1)
+                        {
+                            used.push_front(j);
+                            if (used.size() == nums.size())
+                                return (used);
+                            deque<int> res = dfs(i+1, primes, edges, nums, used);
+                            if (res.size() == nums.size())
+                                return (res);
+                            used.pop_front();
+                        }
 
-                    // 次に後方に追加して探索
-                    if (gcd(nums[used.back()], nums[j]) > 1)
-                    {
-                        used.push_back(j);
-                        if (used.size() == nums.size())
-                            return (used);
-                        deque<int> res = dfs(i+1, primes, edges, nums, used);
-                        if (res.size() == nums.size())
-                            return (res);
-                        used.pop_back();
+                        // 次に後方に追加して探索
+                        if (gcd(nums[used.back()], nums[j]) > 1)
+                        {
+                            used.push_back(j);
+                            if (used.size() == nums.size())
+                                return (used);
+                            deque<int> res = dfs(i+1, primes, edges, nums, used);
+                            if (res.size() == nums.size())
+                                return (res);
+                            used.pop_back();
+                        }
                     }
                 }
             }
