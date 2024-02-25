@@ -15,14 +15,19 @@ public:
         }
         return true;
     }
-    vector<int> dfs(int i, vector<int> &primes, vector<vector<int>> &edges, vector<int> &nums, vector<int> used)
+    deque<int> dfs(int i, vector<int> &primes, vector<vector<int>> &edges, vector<int> &nums, deque<int> used)
     {
-        vector<int> dummy;
-        if (find(used.begin(), used.end(), primes[i]) != used.end())
-            return (dummy);
-        used.push_back(primes[i]);
-        if (used.size() == nums.size())
-            return (used);
+        deque<int> dummy;
+        
+        if (i < primes.size())
+        {
+            if (find(used.begin(), used.end(), primes[i]) != used.end())
+                return (dummy);
+            used.push_back(primes[i]);
+            if (used.size() == nums.size())
+                return (used);
+        }
+
         if (i >= edges.size())
         {
             for (int j=0; j<nums.size(); j++)
@@ -30,33 +35,36 @@ public:
                 if (find(used.begin(), used.end(), j) == used.end())
                 {
                     // まず前方に追加して探索
-                    if (gcd(used[0], j) > 1)
+                    if (gcd(nums[*used.begin()], nums[j]) > 1)
                     {
                         used.push_front(j);
                         if (used.size() == nums.size())
                             return (used);
-                        vector<int> res = dfs(i+1, primes, edges, nums, used);
+                        deque<int> res = dfs(i+1, primes, edges, nums, used);
                         if (res.size() == nums.size())
                             return (res);
                         used.pop_front();
                     }
 
                     // 次に後方に追加して探索
-                    if (gcd(*used.end(), j) > 1)
+                    if (gcd(nums[*(--used.end())], nums[j]) > 1)
                     {
                         used.push_back(j);
                         if (used.size() == nums.size())
                             return (used);
-                        vector<int> res = dfs(i+1, primes, edges, nums, used);
+                        deque<int> res = dfs(i+1, primes, edges, nums, used);
                         if (res.size() == nums.size())
                             return (res);
                         used.pop_back();
                     }
                 }
             }
+            return (dummy);
         }
         else
         {
+            if (edges[i].empty())
+                return (dummy);
             for (int j=0; j<edges[i].size(); j++)
             {
                 if (find(used.begin(), used.end(), edges[i][j]) != used.end())
@@ -64,7 +72,7 @@ public:
                 used.push_back(edges[i][j]);
                 if (used.size() == nums.size())
                     return (used);
-                vector<int> res = dfs(i+1, primes, edges, nums, used);
+                deque<int> res = dfs(i+1, primes, edges, nums, used);
                 if (res.size() == nums.size())
                     return (res);
                 used.pop_back();
@@ -98,10 +106,8 @@ public:
         }
         
         // 全てのインデックスを回収できるか探索する
-        // 今のところ要素数が奇数の時しか対応してない
-        // 余ったインデックスもくっつける
-        vector<int> used;
-        vector<int> res = dfs(0, primes, edges, nums, used);
+        deque<int> used;
+        deque<int> res = dfs(0, primes, edges, nums, used);
         if (res.empty() == true)
             return (false);
         else
