@@ -17,30 +17,19 @@ public:
         }
         
         for (int i=0; i<indices.size(); i++)
-        {
-            if (memo[indices[i]] < score)
-                memo[indices[i]] = score;
-        }
-    }
-    int getScore(vector<int>& arr, vector<int>& memo, int index, int diff)
-    {
-        if (memo[index] == 0)
-        {
-            dynamicProgramming(arr, index, diff, memo);
-            return (memo[index]);
-        }
-        else
-            return (memo[index]);
+            memo[indices[i]] = score;
     }
     int longestSubsequence(vector<int>& arr, int difference) {
         int res = 0;
-        int tmp = 0;
-        vector<int> memo(arr.size());
+        int tmp;
+        vector<int> memo(arr.size(), 0);
         
         for (int i=0; i<arr.size(); i++)
         {
-            tmp = getScore(arr, memo, i, difference);
-            if(res < tmp)
+            if (memo[i] == 0)
+                dynamicProgramming(arr, i, difference, memo);
+            tmp = memo[i];
+            if (res < tmp)
                 res = tmp;
         }
         return (res+1);
