@@ -24,29 +24,19 @@ public:
         
         if (depth >= dlimit)
             return list;
-        else if (list.empty())
-        {
-            vector<string> tmp1;
-            vector<string> tmp2;
-            
-            left.push_back("(");
-            right.push_back(")");
-            tmp1=dfs(left,depth+1,dlimit);
-            tmp2=dfs(right,depth+1,dlimit);
-            copy(tmp1.begin(), tmp1.end(), back_inserter(res));
-            copy(tmp2.begin(), tmp2.end(), back_inserter(res));
-            return (res);
-        }
         else
         {
             vector<string> tmp1;
             vector<string> tmp2;
             for(int i=0; i<left.size(); i++)
                 left[i] += '(';
+            if (left.empty())
+                left.push_back("(");
             tmp1 = dfs(left, depth+1, dlimit);
             for(int i=0; i<right.size(); i++)
                 right[i] +=')';
-            tmp2 = dfs(right, depth+1, dlimit);
+            if (!right.empty())
+                tmp2 = dfs(right, depth+1, dlimit);
             copy(tmp1.begin(), tmp1.end(), back_inserter(res));
             copy(tmp2.begin(), tmp2.end(), back_inserter(res));
             return (res);
