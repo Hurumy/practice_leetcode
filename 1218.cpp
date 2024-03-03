@@ -1,30 +1,37 @@
 class Solution {
 public:
-    void dynamicProgramming(vector<int>& arr, int head, int diff, vector<int>& memo)
+    int dynamicProgramming(vector<int>& arr, int head, int diff, vector<int>& memo)
     {
-        vector<int> indices;
         int score = 1;
-        int cidx = head;
+        int sum = arr[head] + diff;
+        const int siz = arr.size();
         
-        for (int i=head+1; i<arr.size(); i++)
+        for (int i=head+1; i<siz; i++)
         {
-            if (arr[i] == arr[cidx] + diff)
+            if (arr[i] == sum)
             {
                 memo[i] = score;
                 score ++;
-                cidx = i;
+                sum = arr[i] + diff;
             }
         }
+        return (score);
     }
     int longestSubsequence(vector<int>& arr, int difference) {
         vector<int> memo(arr.size(), 0);
+        int res=0;
+        int tmp;
+        const int siz=arr.size();
         
-        for (int i=0; i<arr.size(); i++)
+        for (int i=0; i<siz; i++)
         {
             if (memo[i] == 0)
-                dynamicProgramming(arr, i, difference, memo);
+            {
+                tmp = dynamicProgramming(arr, i, difference, memo);
+                if (tmp > res)
+                    res = tmp;
+            }
         }
-        int res = *max_element(memo.begin(), memo.end());
-        return (res+1);
+        return (res);
     }
 };
